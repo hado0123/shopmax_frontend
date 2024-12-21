@@ -9,7 +9,10 @@ import Navbar from './components/shared/Navbar'
 import Home from './pages/Home'
 import SignupPage from './pages/SignupPage'
 import LoginPage from './pages/LoginPage'
+import ItemCreatePage from './pages/ItemCreatePage'
+import ItemEditPage from './pages/ItemEditPage'
 import RedirectLoginRoute from './components/auth/RedirectLoginRoute'
+import AdminRoute from './components/auth/AdminRoute'
 
 function App() {
    const dispatch = useDispatch()
@@ -35,6 +38,23 @@ function App() {
                   <RedirectLoginRoute>
                      <LoginPage />
                   </RedirectLoginRoute>
+               }
+            />
+            <Route
+               path="/items/create"
+               element={
+                  // 관리자가 아닐 경우는 home으로 리다이렉트
+                  <AdminRoute>
+                     <ItemCreatePage />
+                  </AdminRoute>
+               }
+            />
+            <Route
+               path="/items/edit/:id"
+               element={
+                  <AdminRoute>
+                     <ItemEditPage />
+                  </AdminRoute>
                }
             />
          </Routes>

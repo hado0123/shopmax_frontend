@@ -24,7 +24,7 @@ function ItemCreatePage() {
    )
 
    return (
-      <Container maxWidth="md">
+      <Container maxWidth="md" sx={{ marginTop: 3 }}>
          <h1>상품 등록</h1>
          <ItemForm onSubmit={handleSubmit} />
       </Container>

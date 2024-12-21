@@ -35,7 +35,7 @@ function ItemEditPage() {
    if (error) return <p>에러발생: {error}</p>
 
    return (
-      <Container maxWidth="md">
+      <Container maxWidth="md" sx={{ marginTop: 3 }}>
          <h1>상품 수정</h1>
          {item && <ItemForm onSubmit={handleSubmit} initialValues={item} />}
       </Container>

@@ -46,7 +46,7 @@ const authSlice = createSlice({
    initialState: {
       user: null,
       isAuthenticated: false, //로그인 상태: 로그인이 되어있으면 true 그렇지 않으면 false
-      loading: false,
+      loading: true,
       error: null,
    },
    reducers: {},

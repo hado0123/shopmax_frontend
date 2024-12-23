@@ -1,11 +1,13 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { TextField, Button, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material'
+import { formatWithComma, stripCommas } from '../../utils/priceSet'
 
 function ItemForm({ onSubmit, initialValues = {} }) {
    const [imgUrls, setImgUrls] = useState(initialValues.Imgs ? initialValues.Imgs.map((img) => process.env.REACT_APP_API_URL + img.imgUrl) : []) // 이미지 경로
    const [imgFiles, setImgFiles] = useState([]) // 이미지 파일 객체
    const [itemNm, setItemNm] = useState(initialValues.itemNm || '') // 상품명
-   const [price, setPrice] = useState(initialValues.price || '') // 상품가격
+   // 상품가격은 수정 페이지에서 문자타입으로 변경해야 콤마 사용시 문제 없음, 서버에서 가져온 값은 숫자 타입이므로
+   const [price, setPrice] = useState(initialValues.price ? String(initialValues.price) : '') // 상품가격
    const [stockNumber, setStockNumber] = useState(initialValues.stockNumber || '') // 상품재고
    const [itemSellStatus, setItemSellStatus] = useState(initialValues.itemSellStatus || 'SELL') // 판매상태 (기본값: SELL)
    const [itemDetail, setItemDetail] = useState(initialValues.itemDetail || '') // 상품 설명
@@ -81,6 +83,17 @@ function ItemForm({ onSubmit, initialValues = {} }) {
       [itemNm, price, stockNumber, itemSellStatus, itemDetail, imgFiles, onSubmit, imgUrls]
    )
 
+   // 가격 입력 핸들러
+   const handlePriceChange = (e) => {
+      const rawValue = e.target.value // 입력된 값
+      const numericValue = stripCommas(rawValue) // 숫자만 남기기
+
+      // 숫자가 아니면 리턴
+      if (!/^\d*$/.test(numericValue)) return
+
+      setPrice(numericValue) // 상태 값 업데이트
+   }
+
    // 등록 / 수정 버튼 라벨
    const submitButtonLabel = useMemo(() => (initialValues.id ? '수정하기' : '등록하기'), [initialValues.id])
 
@@ -125,7 +138,15 @@ function ItemForm({ onSubmit, initialValues = {} }) {
          <TextField label="상품명" variant="outlined" fullWidth value={itemNm} onChange={(e) => setItemNm(e.target.value)} placeholder="상품명" sx={{ mt: 2 }} />
 
          {/* 가격 입력 필드 */}
-         <TextField label="가격" variant="outlined" fullWidth value={price} onChange={(e) => setPrice(e.target.value)} placeholder="가격" sx={{ mt: 2 }} />
+         <TextField
+            label="가격"
+            variant="outlined"
+            fullWidth
+            value={formatWithComma(price)} // 콤마 추가된 값 표시
+            onChange={handlePriceChange} // 입력 핸들러
+            placeholder="가격"
+            sx={{ mt: 2 }}
+         />
 
          {/* 재고 입력 필드 */}
          <TextField label="재고수량" variant="outlined" fullWidth value={stockNumber} onChange={(e) => setStockNumber(e.target.value)} placeholder="재고수량" sx={{ mt: 2 }} />

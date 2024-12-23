@@ -8,6 +8,7 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs' //날짜 시간 포맷해주는 패키지
 import 'dayjs/locale/ko' // 한글 로케일 불러오기
+import { formatWithComma } from '../../utils/priceSet'
 
 import { useCallback, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
@@ -165,7 +166,7 @@ function BoardList({ items, handleDeleteThunk }) {
                                     {item.itemNm}
                                  </Link>
                               </TableCell>
-                              <TableCell align="center">{item.price}</TableCell>
+                              <TableCell align="center">{formatWithComma(String(item.price))}</TableCell>
                               <TableCell align="center">{item.itemSellStatus}</TableCell>
                               <TableCell align="center">{dayjs(item.createdAt).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
                               <TableCell align="center">

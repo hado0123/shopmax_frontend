@@ -13,7 +13,7 @@ function ItemCreatePage() {
          dispatch(createItemThunk(itemData))
             .unwrap()
             .then(() => {
-               window.location.href = '/' // 페이지 이동 => 전체 페이지 새로고침
+               window.location.href = '/items/createlist'
             })
             .catch((error) => {
                console.error('상품 등록 에러: ', error)

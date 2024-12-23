@@ -20,7 +20,6 @@ import { logoutUserThunk } from '../../features/authSlice'
 
 const pages = ['상품등록', '상품구매', '고객문의']
 const pageLinks = ['상품등록', '상품구매', '고객문의']
-const settings = ['주문내역', '장바구니', 'Logout']
 
 function Navbar({ isAuthenticated, user }) {
    const dispatch = useDispatch()
@@ -98,11 +97,17 @@ function Navbar({ isAuthenticated, user }) {
                      onClose={handleCloseNavMenu}
                      sx={{ display: { xs: 'block', md: 'none' } }}
                   >
-                     {pages.map((page) => (
-                        <MenuItem key={page} onClick={handleCloseNavMenu}>
-                           <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
-                        </MenuItem>
-                     ))}
+                     <MenuItem>
+                        <Link to="/items/createlist" style={{ color: 'black', textDecoration: 'none' }}>
+                           <Typography sx={{ textAlign: 'center' }}>상품등록</Typography>
+                        </Link>
+                     </MenuItem>
+                     <MenuItem>
+                        <Typography sx={{ textAlign: 'center' }}>상품구매</Typography>
+                     </MenuItem>
+                     <MenuItem>
+                        <Typography sx={{ textAlign: 'center' }}>고객문의</Typography>
+                     </MenuItem>
                   </Menu>
                </Box>
 
@@ -127,11 +132,17 @@ function Navbar({ isAuthenticated, user }) {
                   SHOPMAX
                </Typography>
                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                  {pages.map((page) => (
-                     <Button key={page} onClick={handleCloseNavMenu} sx={{ my: 2, color: '#000', display: 'block' }}>
-                        {page}
-                     </Button>
-                  ))}
+                  <MenuItem>
+                     <Link to="/items/createlist" style={{ color: 'black', textDecoration: 'none' }}>
+                        <Typography sx={{ textAlign: 'center' }}>상품등록</Typography>
+                     </Link>
+                  </MenuItem>
+                  <MenuItem>
+                     <Typography sx={{ textAlign: 'center' }}>상품구매</Typography>
+                  </MenuItem>
+                  <MenuItem>
+                     <Typography sx={{ textAlign: 'center' }}>고객문의</Typography>
+                  </MenuItem>
                </Box>
 
                {/* 내 프로필 */}

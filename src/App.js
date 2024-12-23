@@ -12,6 +12,7 @@ import SignupPage from './pages/SignupPage'
 import LoginPage from './pages/LoginPage'
 import ItemCreatePage from './pages/ItemCreatePage'
 import ItemEditPage from './pages/ItemEditPage'
+import ItemListPage from './pages/ItemListPage'
 import RedirectLoginRoute from './components/auth/RedirectLoginRoute'
 import AdminRoute from './components/auth/AdminRoute'
 
@@ -39,6 +40,16 @@ function App() {
                   <RedirectLoginRoute>
                      <LoginPage />
                   </RedirectLoginRoute>
+               }
+            />
+            {/* 상품 리스트, 등록, 수정 페이지 */}
+            <Route
+               path="/items/createlist"
+               element={
+                  // 관리자가 아닐 경우는 home으로 리다이렉트
+                  <AdminRoute>
+                     <ItemListPage />
+                  </AdminRoute>
                }
             />
             <Route

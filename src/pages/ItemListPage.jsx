@@ -1,7 +1,7 @@
 import { Container, Typography, Pagination, Stack } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchItemsThunk } from '../features/itemSlice'
+import { fetchItemsThunk, deleteItemThunk } from '../features/itemSlice'
 import BoardList from '../components/board/BoardList'
 
 function ItemListPage() {
@@ -12,6 +12,24 @@ function ItemListPage() {
    useEffect(() => {
       dispatch(fetchItemsThunk(page))
    }, [dispatch, page])
+
+   const handleDeleteThunk = (id) => {
+      const result = window.confirm('삭제하시겠습니까?')
+
+      if (result) {
+         dispatch(deleteItemThunk(id))
+            .unwrap()
+            .then(() => {
+               window.location.href = '/items/createlist'
+            })
+            .catch((error) => {
+               console.error('회원가입 에러:', error)
+               alert('삭제 실패!', error)
+            })
+      } else {
+         return
+      }
+   }
 
    // 페이지 변경
    const handlePageChange = useCallback((event, value) => {
@@ -36,7 +54,7 @@ function ItemListPage() {
             </Typography>
          )}
 
-         <BoardList items={items} />
+         <BoardList items={items} handleDeleteThunk={handleDeleteThunk} />
       </Container>
    )
 }

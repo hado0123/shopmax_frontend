@@ -26,7 +26,8 @@ export const updateItemThunk = createAsyncThunk('items/updateItem', async (data,
 export const deleteItemThunk = createAsyncThunk('items/deleteItem', async (id, { rejectWithValue }) => {
    try {
       // eslint-disable-next-line
-      const response = await deleteItem(id)
+      // const response = await deleteItem(id)
+      await deleteItem(id)
       return id // 삭제 성공 후 삭제된 상품의 id만 반환
    } catch (error) {
       return rejectWithValue(error.response?.data?.message || '상품 삭제 실패')

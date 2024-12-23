@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react'
 import { TextField, Button, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material'
 
 function ItemForm({ onSubmit, initialValues = {} }) {
-   const [imgUrls, setImgUrls] = useState([]) // 이미지 경로
+   const [imgUrls, setImgUrls] = useState(initialValues.Imgs ? initialValues.Imgs.map((img) => process.env.REACT_APP_API_URL + img.imgUrl) : []) // 이미지 경로
    const [imgFiles, setImgFiles] = useState([]) // 이미지 파일 객체
    const [itemNm, setItemNm] = useState(initialValues.itemNm || '') // 상품명
    const [price, setPrice] = useState(initialValues.price || '') // 상품가격
@@ -42,12 +42,12 @@ function ItemForm({ onSubmit, initialValues = {} }) {
             return
          }
 
-         if (!price.trim()) {
+         if (!String(price).trim()) {
             alert('가격을 입력하세요.')
             return
          }
 
-         if (!stockNumber.trim()) {
+         if (!String(stockNumber).trim()) {
             alert('재고를 입력하세요.')
             return
          }
@@ -57,7 +57,8 @@ function ItemForm({ onSubmit, initialValues = {} }) {
             return
          }
 
-         if (imgFiles.length === 0) {
+         //  && imgUrls.length === 0 수정시 이미지를 바꾸지 않았을때 에러 방지
+         if (imgFiles.length === 0 && imgUrls.length === 0) {
             alert('이미지를 최소 1개 업로드하세요.')
             return
          }
@@ -77,7 +78,7 @@ function ItemForm({ onSubmit, initialValues = {} }) {
 
          onSubmit(formData) // formData 객체 전송
       },
-      [itemNm, price, stockNumber, itemSellStatus, itemDetail, imgFiles, onSubmit]
+      [itemNm, price, stockNumber, itemSellStatus, itemDetail, imgFiles, onSubmit, imgUrls]
    )
 
    // 등록 / 수정 버튼 라벨

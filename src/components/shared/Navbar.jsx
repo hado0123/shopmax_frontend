@@ -13,17 +13,13 @@ import MenuItem from '@mui/material/MenuItem'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
 // https://mui.com/material-ui/react-app-bar/#app-bar-with-responsive-menu
 
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useCallback, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { logoutUserThunk } from '../../features/authSlice'
 
-const pages = ['상품등록', '상품구매', '고객문의']
-const pageLinks = ['상품등록', '상품구매', '고객문의']
-
 function Navbar({ isAuthenticated, user }) {
    const dispatch = useDispatch()
-   const navigate = useNavigate()
    const [anchorElNav, setAnchorElNav] = useState(null)
    const [anchorElUser, setAnchorElUser] = useState(null)
 
@@ -36,7 +32,7 @@ function Navbar({ isAuthenticated, user }) {
          .catch((error) => {
             alert(error)
          })
-   }, [dispatch, navigate])
+   }, [dispatch])
 
    const handleOpenNavMenu = (event) => {
       setAnchorElNav(event.currentTarget)

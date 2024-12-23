@@ -1,4 +1,5 @@
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, Button, TextField, Stack, Pagination, Select, MenuItem, FormControl, InputLabel } from '@mui/material'
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Stack, Pagination, Select, MenuItem, FormControl, InputLabel, IconButton } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
 // npm install @mui/x-date-pickers 설치 후 사용
 // yarn add @mui/x-date-pickers 설치 후 사용
 // https://mui.com/x/react-date-pickers/date-picker/
@@ -10,11 +11,10 @@ import 'dayjs/locale/ko' // 한글 로케일 불러오기
 
 import { useCallback, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 
 const POSTS_PER_PAGE = 5 // 한 페이지에 표시할 게시글 수
 
-function BoardList({ items }) {
+function BoardList({ items, handleDeleteThunk }) {
    const [filteredItems, setFilteredItems] = useState(items || [])
    const [searchTerm, setSearchTerm] = useState('')
    const [searchCategory, setSearchCategory] = useState('itemNm') // 검색 기준
@@ -151,6 +151,7 @@ function BoardList({ items }) {
                         <TableCell align="center">가격</TableCell>
                         <TableCell align="center">판매상태</TableCell>
                         <TableCell align="center">등록일</TableCell>
+                        <TableCell align="center">삭제</TableCell>
                      </TableRow>
                   </TableHead>
                   <TableBody>
@@ -160,13 +161,18 @@ function BoardList({ items }) {
                               <TableCell align="center">{item.id}</TableCell>
                               <TableCell>
                                  {' '}
-                                 <Link to={`/item/edit/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                 <Link to={`/items/edit/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                     {item.itemNm}
                                  </Link>
                               </TableCell>
                               <TableCell align="center">{item.price}</TableCell>
                               <TableCell align="center">{item.itemSellStatus}</TableCell>
                               <TableCell align="center">{dayjs(item.createdAt).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
+                              <TableCell align="center">
+                                 <IconButton aria-label="delete" onClick={() => handleDeleteThunk(`${item.id}`)}>
+                                    <DeleteIcon />
+                                 </IconButton>
+                              </TableCell>
                            </TableRow>
                         ))
                      ) : (
@@ -186,6 +192,9 @@ function BoardList({ items }) {
                   onChange={handlePageChange} // 페이지 변경 핸들러
                />
             </Stack>
+            <Link to="/items/create">
+               <Button variant="contained">상품등록</Button>
+            </Link>
          </Box>
       </LocalizationProvider>
    )

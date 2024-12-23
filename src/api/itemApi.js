@@ -61,9 +61,10 @@ export const getItemById = async (id) => {
 }
 
 //전체 상품 가져오기(페이징)
-export const getItems = async (page) => {
+export const getItems = async (data) => {
    try {
-      const response = await shopmaxApi.get(`/item?page=${page}`)
+      const { page, searchTerm, searchCategory, sellCategory } = data
+      const response = await shopmaxApi.get(`/item?page=${page}&searchTerm=${searchTerm}&searchCategory=${searchCategory}&sellCategory=${sellCategory}`)
       return response
    } catch (error) {
       console.error(`API Request 오류: ${error.message}`)

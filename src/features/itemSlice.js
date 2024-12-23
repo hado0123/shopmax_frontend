@@ -45,9 +45,9 @@ export const fetchItemByIdThunk = createAsyncThunk('items/fetchItemById', async 
 })
 
 // 전체 상품 리스트 가져오기
-export const fetchItemsThunk = createAsyncThunk('items/fetchItems', async (page, { rejectWithValue }) => {
+export const fetchItemsThunk = createAsyncThunk('items/fetchItems', async (data, { rejectWithValue }) => {
    try {
-      const response = await getItems(page)
+      const response = await getItems(data)
       return response.data
    } catch (error) {
       return rejectWithValue(error.response?.data?.message || '상품 리스트 불러오기 실패')

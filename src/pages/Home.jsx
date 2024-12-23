@@ -7,7 +7,8 @@ function Home() {
       <Container
          maxWidth="lg"
          sx={{
-            marginTop: 3, //24px, 혹은 mt: 3
+            marginTop: 10, // 1 = 8px, 혹은 mt: 10
+            marginBottom: 13,
          }}
       >
          <p>홈</p>

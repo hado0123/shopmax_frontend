@@ -6,6 +6,7 @@ import { checkAuthStatusThunk } from './features/authSlice'
 
 import { Toolbar } from '@mui/material'
 import Navbar from './components/shared/Navbar'
+import Footer from './components/shared/Footer'
 import Home from './pages/Home'
 import SignupPage from './pages/SignupPage'
 import LoginPage from './pages/LoginPage'
@@ -58,6 +59,7 @@ function App() {
                }
             />
          </Routes>
+         <Footer />
       </>
    )
 }

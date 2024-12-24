@@ -1,23 +1,4 @@
-import {
-   Box,
-   Table,
-   TableBody,
-   TableCell,
-   TableContainer,
-   TableHead,
-   TableRow,
-   Paper,
-   Button,
-   TextField,
-   Stack,
-   Pagination,
-   Select,
-   MenuItem,
-   FormControl,
-   InputLabel,
-   IconButton,
-   Typography,
-} from '@mui/material'
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Stack, Pagination, Select, MenuItem, FormControl, InputLabel, IconButton, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { formatWithComma } from '../../utils/priceSet'
 import dayjs from 'dayjs'
@@ -57,7 +38,7 @@ function ItemList() {
 
    // 데이터 가져오기 (검색 및 페이징)
    useEffect(() => {
-      dispatch(fetchItemsThunk({ page, searchTerm, searchCategory, sellCategory }))
+      dispatch(fetchItemsThunk({ page, limit: 5, searchTerm, searchCategory, sellCategory }))
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [dispatch, page, sellCategory, searchSubmit]) // searchCategory와 searchTerm 제외
 

@@ -1,6 +1,6 @@
-import { Container, Typography, Pagination, Stack } from '@mui/material'
-import { useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { Container, Typography } from '@mui/material'
+import LoyaltyIcon from '@mui/icons-material/Loyalty'
+import ItemSellList from '../components/item/ItemSellList'
 
 function Home() {
    return (
@@ -11,7 +11,11 @@ function Home() {
             marginBottom: 13,
          }}
       >
-         <p>홈</p>
+         <Typography variant="h4" align="center" gutterBottom>
+            <LoyaltyIcon sx={{ color: '#e91e63', fontSize: 35 }} />
+            HOT SALE!
+         </Typography>
+         <ItemSellList />
       </Container>
    )
 }

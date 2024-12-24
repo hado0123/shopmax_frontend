@@ -17,7 +17,7 @@ function ItemEditPage() {
          .then(() => {})
          .catch((error) => {
             console.error('상품을 불러오는 중 오류 발생:', error)
-            alert('상품 불러오기에 실패했습니다.', error)
+            alert(`상품 불러오기 실패: ${error}`)
             window.location.href = '/items/createlist'
          })
    }, [dispatch, id])
@@ -32,7 +32,7 @@ function ItemEditPage() {
             })
             .catch((error) => {
                console.error('상품 수정 중 오류 발생:', error)
-               alert('상품 수정에 실패했습니다.', error)
+               alert(`상품 수정 실패: ${error}`)
             })
       },
       [dispatch, id]

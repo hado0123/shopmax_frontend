@@ -6,15 +6,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchItemsThunk } from '../../features/itemSlice'
 import { Link } from 'react-router-dom'
 
-function ItemSellList() {
+function ItemSellList({ searchTerm }) {
    const dispatch = useDispatch()
    const { items, pagination, loading, error } = useSelector((state) => state.items)
    const [page, setPage] = useState(1)
 
    // 데이터 가져오기 (페이징)
    useEffect(() => {
-      dispatch(fetchItemsThunk({ page, limit: 8 }))
-   }, [dispatch, page])
+      dispatch(fetchItemsThunk({ page, limit: 8, searchTerm }))
+   }, [dispatch, page, searchTerm]) //검색어 입력시에도 다시 state변경
 
    if (loading) {
       return null // 아무것도 보여주지 않음

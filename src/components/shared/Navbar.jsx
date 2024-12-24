@@ -30,7 +30,7 @@ function Navbar({ isAuthenticated, user }) {
             window.location.href = '/'
          })
          .catch((error) => {
-            alert(error)
+            alert(`로그아웃 실패: ${error}`)
          })
    }, [dispatch])
 

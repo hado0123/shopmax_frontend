@@ -17,7 +17,7 @@ function ItemCreatePage() {
             })
             .catch((error) => {
                console.error('상품 등록 에러: ', error)
-               alert('상품 등록에 실패했습니다.', error)
+               alert(`상품 등록 실패: ${error}`)
             })
       },
       [dispatch]

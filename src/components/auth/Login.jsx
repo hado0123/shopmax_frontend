@@ -19,7 +19,9 @@ function Login() {
             //이메일과 패스워드가 둘다 입력이 되어있다면
             dispatch(loginUserThunk({ email, password }))
                .unwrap()
-               .then(() => navigate('/')) //로그인 성공시 메인페이지로 이동
+               .then(() => {
+                  window.location.href = '/'
+               }) //로그인 성공시 메인페이지로 이동
                .catch((error) => console.error('로그인 실패:', error)) //로그인 실패시 에러 출력
          } else {
             alert('이메일과 패스워드를 입력해주세요!')

@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { fetchItemByIdThunk } from '../../features/itemSlice'
+import { createOrderThunk } from '../../features/orderSlice'
 
 function ItemSellDetail() {
    const { id } = useParams() // item의 id
@@ -14,6 +15,7 @@ function ItemSellDetail() {
    const { item, error, loading } = useSelector((state) => state.items)
    const [count, setCount] = useState(1)
    const [orderPrice, setOrderPrice] = useState(0)
+   const [orderComplete, setOrderComplete] = useState(false)
 
    //수량 증가시 총 가격 계산
    useEffect(() => {
@@ -25,18 +27,39 @@ function ItemSellDetail() {
    // 상품 데이터 불러오기
    useEffect(() => {
       dispatch(fetchItemByIdThunk(id))
-   }, [dispatch, id])
+   }, [dispatch, id, orderComplete])
 
    //수량 증가
    const handleQuantityChange = (event, value) => {
       setCount(value)
    }
 
+   //상품 주문
    const handleBuy = () => {
       if (item.itemSellStatus === 'SOLD_OUT') {
          alert('품절된 상품입니다.')
       } else {
-         alert(`해당 상품을 ${count}개 구매합니다.`)
+         //items: [{ itemId: 1, count: 2 }, { itemId: 2, count: 1}]
+         dispatch(
+            createOrderThunk({
+               items: [
+                  {
+                     itemId: `${id}`, //상품 id
+                     count, // count state
+                  },
+               ],
+            })
+         )
+            .unwrap()
+            .then(() => {
+               setOrderComplete(true) // state를 바꿔 컴포넌트 재렌더링 실행시 재고가 바뀌어 보인다
+               alert('주문이 완료되었습니다!')
+               return
+            })
+            .catch((error) => {
+               console.error('주문 에러:', error)
+               alert(`주문 실패: ${error}`)
+            })
       }
    }
 
@@ -71,7 +94,7 @@ function ItemSellDetail() {
                      {/* 오른쪽 상세 정보 */}
                      <Grid xs={12} md={6}>
                         <Typography variant="h4" gutterBottom>
-                           <LocalMallIcon sx={{ color: '#ffab40', fontSize: '35px' }} />
+                           <LocalMallIcon sx={{ color: '#ffab40', fontSize: '32px' }} />
                            {item.itemNm}
                         </Typography>
 

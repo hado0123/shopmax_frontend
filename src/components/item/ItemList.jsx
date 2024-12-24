@@ -29,7 +29,7 @@ function ItemList() {
             })
             .catch((error) => {
                console.error('회원가입 에러:', error)
-               alert('삭제 실패!', error)
+               alert(`삭제 실패: ${error}`)
             })
       } else {
          return

@@ -4,6 +4,7 @@ import { formatWithComma } from '../../utils/priceSet'
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchItemsThunk } from '../../features/itemSlice'
+import { Link } from 'react-router-dom'
 
 function ItemSellList() {
    const dispatch = useDispatch()
@@ -39,18 +40,21 @@ function ItemSellList() {
             }}
          >
             {items.map((item) => (
-               <Card key={item.id} sx={{ width: '250px' }}>
-                  {/* 대표이미지만 가져오기 */}
-                  <CardMedia component="img" height="140" image={`${process.env.REACT_APP_API_URL}${item.Imgs.filter((img) => img.repImgYn === 'Y')[0].imgUrl}`} alt={item.itemNm} />
-                  <CardContent>
-                     <Typography variant="h6" component="div">
-                        {item.itemNm}
-                     </Typography>
-                     <Typography variant="body2" color="text.secondary">
-                        {formatWithComma(String(item.price))}원
-                     </Typography>
-                  </CardContent>
-               </Card>
+               // 라우터의 Link사용시 속도는 빠르지만 페이지 새로고침이 아니므로 마운트 하는 부분의 컴포넌트만 툴킷의 thunk를 dispatch한다. 따라서 상품 구매 페이지 이동시 로그인여부를 체크하는 부분은 실행되지 않는다
+               <Link key={item.id} to={`/items/detail/${item.id}`} style={{ textDecoration: 'none' }}>
+                  <Card sx={{ width: '250px' }}>
+                     {/* 대표이미지만 가져오기 */}
+                     <CardMedia component="img" height="140" image={`${process.env.REACT_APP_API_URL}${item.Imgs.filter((img) => img.repImgYn === 'Y')[0].imgUrl}`} alt={item.itemNm} />
+                     <CardContent>
+                        <Typography variant="h6" component="div">
+                           {item.itemNm}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                           {formatWithComma(String(item.price))}원
+                        </Typography>
+                     </CardContent>
+                  </Card>
+               </Link>
             ))}
          </Box>
          {pagination && (

@@ -9,6 +9,7 @@ import Navbar from './components/shared/Navbar'
 import Footer from './components/shared/Footer'
 import Home from './pages/Home'
 import SignupPage from './pages/SignupPage'
+import ItemSellDetailPage from './pages/ItemSellDetailPage'
 import LoginPage from './pages/LoginPage'
 import ItemCreatePage from './pages/ItemCreatePage'
 import ItemEditPage from './pages/ItemEditPage'
@@ -33,6 +34,7 @@ function App() {
          <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/items/detail/:id" element={<ItemSellDetailPage isAuthenticated={isAuthenticated} user={user} />} />
             <Route
                path="/login"
                element={
@@ -64,6 +66,7 @@ function App() {
             <Route
                path="/items/edit/:id"
                element={
+                  // 관리자가 아닐 경우는 home으로 리다이렉트
                   <AdminRoute>
                      <ItemEditPage />
                   </AdminRoute>

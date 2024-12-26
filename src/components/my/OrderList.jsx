@@ -1,9 +1,17 @@
 import { Box, Card, CardMedia, CardContent, Typography, Button, Pagination, CircularProgress } from '@mui/material'
 import Grid from '@mui/material/Grid2'
+// npm install @mui/x-date-pickers 설치 후 사용
+// yarn add @mui/x-date-pickers 설치 후 사용
+// https://mui.com/x/react-date-pickers/date-picker/
+//
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import dayjs from 'dayjs' //날짜 시간 포맷해주는 패키지
+import 'dayjs/locale/ko' // 한글 로케일 불러오기
+
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getOrdersThunk, cancelOrderThunk, deleteOrderThunk } from '../../features/orderSlice'
-import dayjs from 'dayjs'
 
 function OrderList() {
    const dispatch = useDispatch()
@@ -11,6 +19,8 @@ function OrderList() {
    const [page, setPage] = useState(1)
    const [cancelComplete, setCancelComplete] = useState(false)
    const [deleteComplete, setDeleteComplete] = useState(false)
+   const [startDate, setStartDate] = useState(null)
+   const [endDate, setEndDate] = useState(null)
 
    useEffect(() => {
       dispatch(getOrdersThunk({ page, limit: 5 }))
@@ -22,7 +32,8 @@ function OrderList() {
          dispatch(cancelOrderThunk(id))
             .unwrap()
             .then(() => {
-               setCancelComplete(true)
+               // prev로 해줘야 여러개 한번에 주문 취소시 동작함
+               setCancelComplete((prev) => !prev)
             })
             .catch((error) => console.error('주문취소 실패:', error))
       } else {
@@ -36,12 +47,26 @@ function OrderList() {
          dispatch(deleteOrderThunk(id))
             .unwrap()
             .then(() => {
-               setDeleteComplete(true)
+               // prev로 해줘야 여러개 한번에 주문 삭제시 동작함
+               setDeleteComplete((prev) => !prev)
             })
             .catch((error) => console.error('주문삭제 실패:', error))
       } else {
          return
       }
+   }
+
+   // 작성일 기간 필터링
+   const handleDateFilter = () => {
+      if (!startDate || !endDate) {
+         alert('시작일과 종료일을 지정하세요!')
+         return
+      }
+      // YYYY-MM-DD 포맷으로 변환
+      const formattedStartDate = dayjs(startDate).format('YYYY-MM-DD')
+      const formattedEndDate = dayjs(endDate).format('YYYY-MM-DD')
+
+      setPage(1) // 필터링 시 페이지를 첫 번째로 초기화
    }
 
    if (loading) {
@@ -61,43 +86,72 @@ function OrderList() {
    }
 
    return (
-      <Box p={2}>
-         <Grid container spacing={2}>
-            {orders.map((order) => (
-               <Grid xs={12} key={order.id} sx={{ width: '100%' }}>
-                  <Card sx={{ display: 'flex', mb: 2, position: 'relative' }}>
-                     <CardMedia component="img" sx={{ height: 150, width: 170 }} image={`${process.env.REACT_APP_API_URL}${order.Items.map((i) => i.Imgs.map((img) => img.imgUrl))}`} alt={order.Items.map((i) => i.itemNm)} />
-                     <CardContent sx={{ flex: 1 }}>
-                        <Typography variant="h6" gutterBottom>
-                           {order.Items.map((i) => i.itemNm)}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" gutterBottom>
-                           주문 날짜: {dayjs(order.orderDate).format('YYYY-MM-DD HH:mm:ss')}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" gutterBottom>
-                           총 주문 수량: {order.OrderItems.map((oi) => oi.count)}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" gutterBottom>
-                           총 주문 금액: {order.OrderItems.map((oi) => oi.orderPrice.toLocaleString('ko-KR'))}원
-                        </Typography>
-                     </CardContent>
-                     {order.orderStatus === 'ORDER' ? (
-                        <Button variant="contained" color="info" size="small" sx={{ position: 'absolute', top: 8, right: 8 }} onClick={() => handleCancelOrder(order.id)}>
-                           주문 취소
-                        </Button>
-                     ) : (
-                        <Button variant="contained" color="error" size="small" sx={{ position: 'absolute', top: 8, right: 8 }} onClick={() => handleDeleteOrder(order.id)}>
-                           주문 삭제
-                        </Button>
-                     )}
-                  </Card>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+         <Box p={2}>
+            {/* 날짜 검색 */}
+            <Box
+               sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 2,
+                  flexWrap: 'wrap', // 화면 크기에 따라 줄바꿈
+                  mb: 7,
+                  mt: 5,
+               }}
+            >
+               <DatePicker label="시작일" value={startDate} onChange={(newValue) => setStartDate(newValue)} sx={{ width: '35%' }} />
+               <DatePicker label="종료일" value={endDate} onChange={(newValue) => setEndDate(newValue)} sx={{ width: '35%' }} />
+               <Button variant="contained" onClick={handleDateFilter}>
+                  날짜 검색
+               </Button>
+            </Box>
+
+            {/* 리스트 출력 */}
+            {orders.length > 0 ? (
+               <Grid container spacing={2}>
+                  {orders.map((order) => (
+                     <Grid xs={12} key={order.id} sx={{ width: '100%' }}>
+                        <Card sx={{ display: 'flex', mb: 2, position: 'relative' }}>
+                           <CardMedia component="img" sx={{ height: 150, width: 170 }} image={`${process.env.REACT_APP_API_URL}${order.Items.map((i) => i.Imgs.map((img) => img.imgUrl))}`} alt={order.Items.map((i) => i.itemNm)} />
+                           <CardContent sx={{ flex: 1 }}>
+                              <Typography variant="h6" gutterBottom>
+                                 {order.Items.map((i) => i.itemNm)}
+                              </Typography>
+                              <Typography variant="body2" color="textSecondary" gutterBottom>
+                                 주문 날짜: {dayjs(order.orderDate).format('YYYY-MM-DD HH:mm:ss')}
+                              </Typography>
+                              <Typography variant="body2" color="textSecondary" gutterBottom>
+                                 총 주문 수량: {order.OrderItems.map((oi) => oi.count)}
+                              </Typography>
+                              <Typography variant="body2" color="textSecondary" gutterBottom>
+                                 총 주문 금액: {order.OrderItems.map((oi) => oi.orderPrice.toLocaleString('ko-KR'))}원
+                              </Typography>
+                           </CardContent>
+                           {order.orderStatus === 'ORDER' ? (
+                              <Button variant="contained" color="info" size="small" sx={{ position: 'absolute', top: 8, right: 8 }} onClick={() => handleCancelOrder(order.id)}>
+                                 주문 취소
+                              </Button>
+                           ) : (
+                              <Button variant="contained" color="error" size="small" sx={{ position: 'absolute', top: 8, right: 8 }} onClick={() => handleDeleteOrder(order.id)}>
+                                 주문 삭제
+                              </Button>
+                           )}
+                        </Card>
+                     </Grid>
+                  ))}
                </Grid>
-            ))}
-         </Grid>
-         <Box display="flex" justifyContent="center" mt={2}>
-            <Pagination count={pagination.totalPages} page={page} onChange={(event, value) => setPage(value)} color="primary" />
+            ) : (
+               <Box sx={{ textAlign: 'center' }}>
+                  <Typography variant="h6">주문 내역이 없습니다.</Typography>
+               </Box>
+            )}
+
+            <Box display="flex" justifyContent="center" mt={2}>
+               <Pagination count={pagination.totalPages} page={page} onChange={(event, value) => setPage(value)} color="primary" />
+            </Box>
          </Box>
-      </Box>
+      </LocalizationProvider>
    )
 }
 

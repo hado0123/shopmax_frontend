@@ -30,33 +30,47 @@ function ItemSellList({ searchTerm }) {
 
    return (
       <Box sx={{ padding: '20px' }}>
-         <Box
-            sx={{
-               display: 'grid',
-               gridTemplateColumns: 'repeat(4, 1fr)',
-               gridAutoRows: 'auto',
-               gap: '16px',
-               justifyItems: 'center',
-            }}
-         >
-            {items.map((item) => (
-               // 라우터의 Link사용시 속도는 빠르지만 페이지 새로고침이 아니므로 마운트 하는 부분의 컴포넌트만 툴킷의 thunk를 dispatch한다. 따라서 상품 구매 페이지 이동시 로그인여부를 체크하는 부분은 실행되지 않는다
-               <Link key={item.id} to={`/items/detail/${item.id}`} style={{ textDecoration: 'none' }}>
-                  <Card sx={{ width: '250px' }}>
-                     {/* 대표이미지만 가져오기 */}
-                     <CardMedia component="img" height="140" image={`${process.env.REACT_APP_API_URL}${item.Imgs.filter((img) => img.repImgYn === 'Y')[0].imgUrl}`} alt={item.itemNm} />
-                     <CardContent>
-                        <Typography variant="h6" component="div">
-                           {item.itemNm}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                           {formatWithComma(String(item.price))}원
-                        </Typography>
-                     </CardContent>
-                  </Card>
-               </Link>
-            ))}
-         </Box>
+         {items.length > 0 ? (
+            <Box
+               sx={{
+                  display: 'grid',
+                  gridTemplateColumns: {
+                     xs: 'repeat(1, 1fr)', // 모바일: 1열
+                     sm: 'repeat(2, 1fr)', // 작은 화면: 2열
+                     md: 'repeat(3, 1fr)', // 중간 화면: 3열
+                     lg: 'repeat(4, 1fr)', // 큰 화면: 4열
+                  },
+                  gridAutoRows: 'auto',
+                  gap: '16px',
+                  justifyItems: 'center',
+               }}
+            >
+               {items.map(
+                  (
+                     item // 라우터의 Link사용시 속도는 빠르지만 페이지 새로고침이 아니므로 마운트 하는 부분의 컴포넌트만 툴킷의 thunk를 dispatch한다. 따라서 상품 구매 페이지 이동시 로그인여부를 체크하는 부분은 실행되지 않는다
+                  ) => (
+                     <Link key={item.id} to={`/items/detail/${item.id}`} style={{ textDecoration: 'none' }}>
+                        <Card sx={{ width: '250px' }}>
+                           {/* 대표이미지만 가져오기 */}
+                           <CardMedia component="img" height="140" image={`${process.env.REACT_APP_API_URL}${item.Imgs.filter((img) => img.repImgYn === 'Y')[0].imgUrl}`} alt={item.itemNm} />
+                           <CardContent>
+                              <Typography variant="h6" component="div">
+                                 {item.itemNm}
+                              </Typography>
+                              <Typography variant="body2" color="text.secondary">
+                                 {formatWithComma(String(item.price))}원
+                              </Typography>
+                           </CardContent>
+                        </Card>
+                     </Link>
+                  )
+               )}
+            </Box>
+         ) : (
+            <Box sx={{ textAlign: 'center' }}>
+               <Typography variant="h6">검색된 상품이 없습니다.</Typography>
+            </Box>
+         )}
          {pagination && (
             <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                <Pagination count={pagination.totalPages} page={page} onChange={(event, value) => setPage(value)} color="primary" />

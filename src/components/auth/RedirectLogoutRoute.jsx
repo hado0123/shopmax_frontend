@@ -11,6 +11,7 @@ function RedirectLoginRoute({ children }) {
 
    // 로그인 안했을 경우, 홈으로 리다이렉트
    if (!isAuthenticated) {
+      alert('로그인이 필요합니다!')
       return <Navigate to="/" />
    }
 

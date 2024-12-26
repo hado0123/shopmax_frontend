@@ -31,6 +31,7 @@ function AdminRoute({ children }) {
 
    // 인증되지 않았거나 관리자가 아닐 경우 리다이렉트
    if (!isAuthenticated || user?.role !== 'ADMIN') {
+      alert('접근 권한이 없습니다!')
       return <Navigate to="/" /> // 홈 페이지로 리다이렉트
    }
 

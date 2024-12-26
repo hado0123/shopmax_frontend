@@ -28,7 +28,7 @@ function ItemEditPage() {
          dispatch(updateItemThunk({ id, itemData }))
             .unwrap()
             .then(() => {
-               window.location.href = '/items/createlist'
+               alert('수정이 완료되었습니다.')
             })
             .catch((error) => {
                console.error('상품 수정 중 오류 발생:', error)

@@ -52,9 +52,8 @@ function ItemSellDetail() {
          )
             .unwrap()
             .then(() => {
-               setOrderComplete(true) // state를 바꿔 컴포넌트 재렌더링 실행시 재고가 바뀌어 보인다
                alert('주문이 완료되었습니다!')
-               return
+               setOrderComplete(true) // state를 바꿔 컴포넌트 재렌더링 실행시 재고가 바뀌어 보인다
             })
             .catch((error) => {
                console.error('주문 에러:', error)
@@ -99,7 +98,7 @@ function ItemSellDetail() {
                         </Typography>
 
                         <Typography variant="h6" gutterBottom>
-                           가격: {item.price.toLocaleString()}원
+                           가격: {item.price.toLocaleString('ko-KR')}원
                         </Typography>
                         <Typography variant="body2" color="text.secondary" gutterBottom>
                            현재 재고: {item.stockNumber}개
@@ -110,7 +109,7 @@ function ItemSellDetail() {
                         ) : (
                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '300px' }}>
                               <NumberInput aria-label="Demo number input" placeholder="수량" value={count} onChange={handleQuantityChange} min={1} max={item.stockNumber} />
-                              <Typography variant="h6">총 가격: {orderPrice.toLocaleString()}원</Typography>
+                              <Typography variant="h6">총 가격: {orderPrice.toLocaleString('ko-KR')}원</Typography>
                               <Button variant="contained" color="primary" onClick={handleBuy}>
                                  구매하기
                               </Button>

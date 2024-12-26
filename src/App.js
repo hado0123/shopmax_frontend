@@ -14,7 +14,10 @@ import LoginPage from './pages/LoginPage'
 import ItemCreatePage from './pages/ItemCreatePage'
 import ItemEditPage from './pages/ItemEditPage'
 import ItemListPage from './pages/ItemListPage'
+import MyOrderListPage from './pages/MyOrderListPage'
+
 import RedirectLoginRoute from './components/auth/RedirectLoginRoute'
+import RedirectLogoutRoute from './components/auth/RedirectLogoutRoute'
 import AdminRoute from './components/auth/AdminRoute'
 
 function App() {
@@ -34,7 +37,7 @@ function App() {
          <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route path="/items/detail/:id" element={<ItemSellDetailPage isAuthenticated={isAuthenticated} user={user} />} />
+            <Route path="/items/detail/:id" element={<ItemSellDetailPage />} />
             <Route
                path="/login"
                element={
@@ -42,6 +45,15 @@ function App() {
                   <RedirectLoginRoute>
                      <LoginPage />
                   </RedirectLoginRoute>
+               }
+            />
+            <Route
+               path="/myorderlist"
+               element={
+                  // 로그아웃 상태일때는 home으로 리다이렉트
+                  <RedirectLogoutRoute>
+                     <MyOrderListPage />
+                  </RedirectLogoutRoute>
                }
             />
             {/* 상품 리스트, 등록, 수정 페이지 */}

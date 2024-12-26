@@ -170,8 +170,10 @@ function Navbar({ isAuthenticated, user }) {
                         open={Boolean(anchorElUser)}
                         onClose={handleCloseUserMenu}
                      >
-                        <MenuItem onClick={handleCloseUserMenu}>
-                           <Typography sx={{ textAlign: 'center' }}>주문내역</Typography>
+                        <MenuItem>
+                           <Link href="/myorderlist" style={{ color: 'black', textDecoration: 'none' }}>
+                              <Typography sx={{ textAlign: 'center' }}>주문내역</Typography>
+                           </Link>
                         </MenuItem>
                         <MenuItem onClick={handleCloseUserMenu}>
                            <Typography sx={{ textAlign: 'center' }}>장바구니</Typography>

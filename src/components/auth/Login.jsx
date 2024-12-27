@@ -28,7 +28,7 @@ function Login() {
             return
          }
       },
-      [dispatch, email, password, navigate]
+      [dispatch, email, password]
    )
 
    const loginButtonContent = useMemo(

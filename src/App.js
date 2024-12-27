@@ -15,6 +15,7 @@ import ItemCreatePage from './pages/ItemCreatePage'
 import ItemEditPage from './pages/ItemEditPage'
 import ItemListPage from './pages/ItemListPage'
 import MyOrderListPage from './pages/MyOrderListPage'
+import DomainPage from './pages/DomainPage'
 
 import RedirectLoginRoute from './components/auth/RedirectLoginRoute'
 import RedirectLogoutRoute from './components/auth/RedirectLogoutRoute'
@@ -81,6 +82,15 @@ function App() {
                   // 관리자가 아닐 경우는 home으로 리다이렉트
                   <AdminRoute>
                      <ItemEditPage />
+                  </AdminRoute>
+               }
+            />
+            <Route
+               path="/domain"
+               element={
+                  // 관리자가 아닐 경우는 home으로 리다이렉트
+                  <AdminRoute>
+                     <DomainPage />
                   </AdminRoute>
                }
             />

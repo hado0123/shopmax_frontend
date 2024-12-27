@@ -185,6 +185,13 @@ function Navbar({ isAuthenticated, user }) {
                         <MenuItem onClick={handleLogout}>
                            <Typography sx={{ textAlign: 'center' }}>로그아웃</Typography>
                         </MenuItem>
+                        {user && user.role === 'ADMIN' && (
+                           <MenuItem>
+                              <Link to="/domain" style={{ color: 'black', textDecoration: 'none' }}>
+                                 <Typography sx={{ textAlign: 'center' }}>도메인 등록</Typography>
+                              </Link>
+                           </MenuItem>
+                        )}
                      </Menu>
                   </Box>
                ) : (

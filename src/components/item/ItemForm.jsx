@@ -84,7 +84,7 @@ function ItemForm({ onSubmit, initialValues = {} }) {
    )
 
    // 가격 입력 핸들러
-   const handlePriceChange = (e) => {
+   const handlePriceChange = useCallback((e) => {
       const rawValue = e.target.value // 입력된 값
       const numericValue = stripCommas(rawValue) // 숫자만 남기기
 
@@ -92,7 +92,7 @@ function ItemForm({ onSubmit, initialValues = {} }) {
       if (!/^\d*$/.test(numericValue)) return
 
       setPrice(numericValue) // 상태 값 업데이트
-   }
+   }, [])
 
    // 등록 / 수정 버튼 라벨
    const submitButtonLabel = useMemo(() => (initialValues.id ? '수정하기' : '등록하기'), [initialValues.id])

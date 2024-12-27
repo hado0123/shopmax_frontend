@@ -3,7 +3,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { formatWithComma } from '../../utils/priceSet'
 import dayjs from 'dayjs'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchItemsThunk, deleteItemThunk } from '../../features/itemSlice'
@@ -18,23 +18,26 @@ function ItemList() {
    const [searchSubmit, setSearchSubmit] = useState(false) // 버튼 클릭 트리거 상태
    const [page, setPage] = useState(1)
 
-   const handleDeleteThunk = (id) => {
-      const result = window.confirm('삭제하시겠습니까?')
+   const handleDeleteThunk = useCallback(
+      (id) => {
+         const result = window.confirm('삭제하시겠습니까?')
 
-      if (result) {
-         dispatch(deleteItemThunk(id))
-            .unwrap()
-            .then(() => {
-               window.location.href = '/items/createlist'
-            })
-            .catch((error) => {
-               console.error('회원가입 에러:', error)
-               alert(`삭제 실패: ${error}`)
-            })
-      } else {
-         return
-      }
-   }
+         if (result) {
+            dispatch(deleteItemThunk(id))
+               .unwrap()
+               .then(() => {
+                  window.location.href = '/items/createlist'
+               })
+               .catch((error) => {
+                  console.error('회원가입 에러:', error)
+                  alert(`삭제 실패: ${error}`)
+               })
+         } else {
+            return
+         }
+      },
+      [dispatch]
+   )
 
    // 데이터 가져오기 (검색 및 페이징)
    useEffect(() => {
@@ -43,33 +46,33 @@ function ItemList() {
    }, [dispatch, page, sellCategory, searchSubmit]) // searchCategory와 searchTerm 제외
 
    //검색 버튼 클릭시
-   const handleSearchSubmit = (event) => {
+   const handleSearchSubmit = useCallback((event) => {
       event.preventDefault()
       setSearchSubmit((prev) => !prev) // 상태를 토글하여 useEffect를 실행
       setPage(1) // 검색 시 페이지 초기화
-   }
+   }, [])
 
    // 검색어 변경 핸들러
-   const handleSearchChange = (event) => {
+   const handleSearchChange = useCallback((event) => {
       setSearchTerm(event.target.value)
-   }
+   }, [])
 
    // 검색 기준 변경 핸들러
-   const handleSearchCategoryChange = (event) => {
+   const handleSearchCategoryChange = useCallback((event) => {
       setSearchCategory(event.target.value)
       setPage(1)
-   }
+   }, [])
 
    // 판매 상태 변경 핸들러
-   const handleSellCategoryChange = (event) => {
+   const handleSellCategoryChange = useCallback((event) => {
       setSellCategory(event.target.value)
       setPage(1)
-   }
+   }, [])
 
    // 페이지 변경 핸들러
-   const handlePageChange = (event, value) => {
+   const handlePageChange = useCallback((event, value) => {
       setPage(value)
-   }
+   }, [])
 
    if (loading) {
       return null //아무것도 보여주지 X

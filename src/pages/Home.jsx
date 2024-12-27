@@ -2,13 +2,13 @@ import { Container, Typography } from '@mui/material'
 import LoyaltyIcon from '@mui/icons-material/Loyalty'
 import ItemSellList from '../components/item/ItemSellList'
 import SearchBar from '../components/shared/Searchbar'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 
 function Home() {
    const [searchTerm, setSearchTerm] = useState('')
-   const onSearch = (search) => {
+   const onSearch = useCallback((search) => {
       setSearchTerm(search)
-   }
+   }, [])
 
    return (
       <Container

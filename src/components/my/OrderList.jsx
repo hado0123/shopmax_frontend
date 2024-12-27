@@ -9,7 +9,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs' //날짜 시간 포맷해주는 패키지
 import 'dayjs/locale/ko' // 한글 로케일 불러오기
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getOrdersThunk, cancelOrderThunk, deleteOrderThunk } from '../../features/orderSlice'
 
@@ -28,51 +28,54 @@ function OrderList() {
       dispatch(getOrdersThunk({ page, limit: 5, startDate: formattedStartDate, endDate: formattedEndDate }))
    }, [dispatch, page, cancelComplete, deleteComplete, formattedStartDate, formattedEndDate])
 
-   const handleCancelOrder = (id) => {
-      const result = window.confirm('주문을 취소하시겠습니까?')
-      if (result) {
-         dispatch(cancelOrderThunk(id))
-            .unwrap()
-            .then(() => {
-               // prev로 해줘야 여러개 한번에 주문 취소시 동작함
-               setCancelComplete((prev) => !prev)
-            })
-            .catch((error) => console.error('주문취소 실패:', error))
-      } else {
-         return
-      }
-   }
+   const handleCancelOrder = useCallback(
+      (id) => {
+         const result = window.confirm('주문을 취소하시겠습니까?')
+         if (result) {
+            dispatch(cancelOrderThunk(id))
+               .unwrap()
+               .then(() => {
+                  // prev로 해줘야 여러개 한번에 주문 취소시 동작함
+                  setCancelComplete((prev) => !prev)
+               })
+               .catch((error) => console.error('주문취소 실패:', error))
+         } else {
+            return
+         }
+      },
+      [dispatch]
+   )
 
-   const handleDeleteOrder = (id) => {
-      const result = window.confirm('주문 내역을 삭제하시겠습니까?')
-      if (result) {
-         dispatch(deleteOrderThunk(id))
-            .unwrap()
-            .then(() => {
-               // prev로 해줘야 여러개 한번에 주문 삭제시 동작함
-               setDeleteComplete((prev) => !prev)
-            })
-            .catch((error) => console.error('주문삭제 실패:', error))
-      } else {
-         return
-      }
-   }
+   const handleDeleteOrder = useCallback(
+      (id) => {
+         const result = window.confirm('주문 내역을 삭제하시겠습니까?')
+         if (result) {
+            dispatch(deleteOrderThunk(id))
+               .unwrap()
+               .then(() => {
+                  // prev로 해줘야 여러개 한번에 주문 삭제시 동작함
+                  setDeleteComplete((prev) => !prev)
+               })
+               .catch((error) => console.error('주문삭제 실패:', error))
+         } else {
+            return
+         }
+      },
+      [dispatch]
+   )
 
    // 작성일 기간 필터링
-   const handleDateFilter = () => {
+   const handleDateFilter = useCallback(() => {
       if (!startDate || !endDate) {
          alert('시작일과 종료일을 지정하세요!')
          return
       }
       // YYYY-MM-DD 포맷으로 변환
-      // const formattedStartDate = dayjs(startDate).format('YYYY-MM-DD')
-      // const formattedEndDate = dayjs(endDate).format('YYYY-MM-DD')
-
       setFormattedStartDate(dayjs(startDate).format('YYYY-MM-DD'))
       setFormattedEndDate(dayjs(endDate).format('YYYY-MM-DD'))
 
       setPage(1) // 필터링 시 페이지를 첫 번째로 초기화
-   }
+   }, [startDate, endDate])
 
    if (loading) {
       return (

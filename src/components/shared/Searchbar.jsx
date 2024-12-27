@@ -1,20 +1,23 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { TextField, IconButton, Box } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 
 function SearchBar({ onSearch }) {
    const [searchTerm, setSearchTerm] = useState('')
 
-   const handleInputChange = (event) => {
+   const handleInputChange = useCallback((event) => {
       setSearchTerm(event.target.value)
-   }
+   }, [])
 
-   const handleSearch = (event) => {
-      event.preventDefault() // 폼 제출 기본 동작 방지
-      if (onSearch && searchTerm.trim() !== '') {
-         onSearch(searchTerm.trim())
-      }
-   }
+   const handleSearch = useCallback(
+      (event) => {
+         event.preventDefault() // 폼 제출 기본 동작 방지
+         if (onSearch && searchTerm.trim() !== '') {
+            onSearch(searchTerm.trim())
+         }
+      },
+      [searchTerm, onSearch]
+   )
 
    return (
       <Box component="form" onSubmit={handleSearch} sx={{ display: 'flex', alignItems: 'center', width: '80%', margin: '0 auto' }}>

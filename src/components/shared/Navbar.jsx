@@ -34,20 +34,21 @@ function Navbar({ isAuthenticated, user }) {
          })
    }, [dispatch])
 
-   const handleOpenNavMenu = (event) => {
+   const handleOpenNavMenu = useCallback((event) => {
       setAnchorElNav(event.currentTarget)
-   }
-   const handleOpenUserMenu = (event) => {
+   }, [])
+
+   const handleOpenUserMenu = useCallback((event) => {
       setAnchorElUser(event.currentTarget)
-   }
+   }, [])
 
-   const handleCloseNavMenu = () => {
+   const handleCloseNavMenu = useCallback(() => {
       setAnchorElNav(null)
-   }
+   }, [])
 
-   const handleCloseUserMenu = () => {
+   const handleCloseUserMenu = useCallback(() => {
       setAnchorElUser(null)
-   }
+   }, [])
 
    return (
       <AppBar position="fixed" sx={{ backgroundColor: '#fff', color: '#000' }}>

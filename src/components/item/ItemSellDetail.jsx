@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid2'
 import { NumberInput } from '../../styles/NumberInputBasic'
 import LocalMallIcon from '@mui/icons-material/LocalMall'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { fetchItemByIdThunk } from '../../features/itemSlice'
@@ -30,12 +30,12 @@ function ItemSellDetail() {
    }, [dispatch, id, orderComplete])
 
    //수량 증가
-   const handleQuantityChange = (event, value) => {
+   const handleQuantityChange = useCallback((event, value) => {
       setCount(value)
-   }
+   }, [])
 
    //상품 주문
-   const handleBuy = () => {
+   const handleBuy = useCallback(() => {
       if (item.itemSellStatus === 'SOLD_OUT') {
          alert('품절된 상품입니다.')
       } else {
@@ -60,7 +60,8 @@ function ItemSellDetail() {
                alert(`주문 실패: ${error}`)
             })
       }
-   }
+      // eslint-disable-next-line
+   }, [dispatch, count, id])
 
    if (loading) {
       return null //아무것도 보여주지 X

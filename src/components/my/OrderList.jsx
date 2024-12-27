@@ -21,10 +21,12 @@ function OrderList() {
    const [deleteComplete, setDeleteComplete] = useState(false)
    const [startDate, setStartDate] = useState(null)
    const [endDate, setEndDate] = useState(null)
+   const [formattedStartDate, setFormattedStartDate] = useState('')
+   const [formattedEndDate, setFormattedEndDate] = useState('')
 
    useEffect(() => {
-      dispatch(getOrdersThunk({ page, limit: 5 }))
-   }, [dispatch, page, cancelComplete, deleteComplete])
+      dispatch(getOrdersThunk({ page, limit: 5, startDate: formattedStartDate, endDate: formattedEndDate }))
+   }, [dispatch, page, cancelComplete, deleteComplete, formattedStartDate, formattedEndDate])
 
    const handleCancelOrder = (id) => {
       const result = window.confirm('주문을 취소하시겠습니까?')
@@ -63,8 +65,11 @@ function OrderList() {
          return
       }
       // YYYY-MM-DD 포맷으로 변환
-      const formattedStartDate = dayjs(startDate).format('YYYY-MM-DD')
-      const formattedEndDate = dayjs(endDate).format('YYYY-MM-DD')
+      // const formattedStartDate = dayjs(startDate).format('YYYY-MM-DD')
+      // const formattedEndDate = dayjs(endDate).format('YYYY-MM-DD')
+
+      setFormattedStartDate(dayjs(startDate).format('YYYY-MM-DD'))
+      setFormattedEndDate(dayjs(endDate).format('YYYY-MM-DD'))
 
       setPage(1) // 필터링 시 페이지를 첫 번째로 초기화
    }

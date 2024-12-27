@@ -155,9 +155,11 @@ function OrderList() {
                </Box>
             )}
 
-            <Box display="flex" justifyContent="center" mt={2}>
-               <Pagination count={pagination.totalPages} page={page} onChange={(event, value) => setPage(value)} color="primary" />
-            </Box>
+            {pagination && (
+               <Box display="flex" justifyContent="center" mt={2}>
+                  <Pagination count={pagination.totalPages} page={page} onChange={(event, value) => setPage(value)} color="primary" />
+               </Box>
+            )}
          </Box>
       </LocalizationProvider>
    )

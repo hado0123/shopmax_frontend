@@ -10,10 +10,11 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
-import Link from '@mui/material/Link'
+// import Link from '@mui/material/Link'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
 // https://mui.com/material-ui/react-app-bar/#app-bar-with-responsive-menu
 
+import { Link } from 'react-router-dom'
 import { useCallback, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { logoutUserThunk } from '../../features/authSlice'
@@ -96,7 +97,7 @@ function Navbar({ isAuthenticated, user }) {
                   >
                      <MenuItem>
                         {/* 라우터의 Link 사용시 페이지 state가 그대로 남아있어서 2페이지에 있으면 메뉴를 클릭해도 2페이지가 그대로 보임. 따라서 href사용 */}
-                        <Link href="/items/createlist" style={{ color: 'black', textDecoration: 'none' }}>
+                        <Link to="/items/createlist" style={{ color: 'black', textDecoration: 'none' }}>
                            <Typography sx={{ textAlign: 'center' }}>상품등록</Typography>
                         </Link>
                      </MenuItem>
@@ -132,7 +133,7 @@ function Navbar({ isAuthenticated, user }) {
                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                   {user && user.role === 'ADMIN' && (
                      <MenuItem>
-                        <Link href="/items/createlist" style={{ color: 'black', textDecoration: 'none' }}>
+                        <Link to="/items/createlist" style={{ color: 'black', textDecoration: 'none' }}>
                            <Typography sx={{ textAlign: 'center' }}>상품등록</Typography>
                         </Link>
                      </MenuItem>
@@ -174,7 +175,7 @@ function Navbar({ isAuthenticated, user }) {
                         onClose={handleCloseUserMenu}
                      >
                         <MenuItem>
-                           <Link href="/myorderlist" style={{ color: 'black', textDecoration: 'none' }}>
+                           <Link to="/myorderlist" style={{ color: 'black', textDecoration: 'none' }}>
                               <Typography sx={{ textAlign: 'center' }}>주문내역</Typography>
                            </Link>
                         </MenuItem>
@@ -187,7 +188,7 @@ function Navbar({ isAuthenticated, user }) {
                      </Menu>
                   </Box>
                ) : (
-                  <Link href="/login">
+                  <Link to="/login">
                      <Button variant="contained">로그인</Button>
                   </Link>
                )}

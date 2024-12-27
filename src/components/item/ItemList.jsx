@@ -43,7 +43,7 @@ function ItemList() {
    useEffect(() => {
       dispatch(fetchItemsThunk({ page, limit: 5, searchTerm, searchCategory, sellCategory }))
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [dispatch, page, sellCategory, searchSubmit]) // searchCategory와 searchTerm 제외
+   }, [dispatch, page, sellCategory, searchSubmit]) // searchCategory와 searchTerm 제외 -> 상태가 바뀔때 마다 실행되므로 제외시킴
 
    //검색 버튼 클릭시
    const handleSearchSubmit = useCallback((event) => {
@@ -165,6 +165,7 @@ function ItemList() {
                <InputLabel>검색 기준</InputLabel>
                <Select value={searchCategory} onChange={handleSearchCategoryChange} label="검색 기준">
                   <MenuItem value="itemNm">상품명</MenuItem>
+                  <MenuItem value="itemDetail">상품설명</MenuItem>
                </Select>
             </FormControl>
 

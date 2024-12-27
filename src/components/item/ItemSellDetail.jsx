@@ -36,31 +36,26 @@ function ItemSellDetail() {
 
    //상품 주문
    const handleBuy = useCallback(() => {
-      if (item.itemSellStatus === 'SOLD_OUT') {
-         alert('품절된 상품입니다.')
-      } else {
-         //items: [{ itemId: 1, count: 2 }, { itemId: 2, count: 1}]
-         dispatch(
-            createOrderThunk({
-               items: [
-                  {
-                     itemId: `${id}`, //상품 id
-                     count, // count state
-                  },
-               ],
-            })
-         )
-            .unwrap()
-            .then(() => {
-               alert('주문이 완료되었습니다!')
-               setOrderComplete(true) // state를 바꿔 컴포넌트 재렌더링 실행시 재고가 바뀌어 보인다
-            })
-            .catch((error) => {
-               console.error('주문 에러:', error)
-               alert(`주문 실패: ${error}`)
-            })
-      }
-      // eslint-disable-next-line
+      //items: [{ itemId: 1, count: 2 }, { itemId: 2, count: 1}]
+      dispatch(
+         createOrderThunk({
+            items: [
+               {
+                  itemId: `${id}`, //상품 id
+                  count, // count state
+               },
+            ],
+         })
+      )
+         .unwrap()
+         .then(() => {
+            alert('주문이 완료되었습니다!')
+            setOrderComplete(true) // state를 바꿔 컴포넌트 재렌더링 실행시 재고가 바뀌어 보인다
+         })
+         .catch((error) => {
+            console.error('주문 에러:', error)
+            alert(`주문 실패: ${error}`)
+         })
    }, [dispatch, count, id])
 
    if (loading) {

@@ -1,9 +1,9 @@
 import shopmaxApi from './axiosApi'
 
-// 도메인 등록하기
-export const setDomain = async (data) => {
+// 토큰 발급받기
+export const getToken = async () => {
    try {
-      const response = await shopmaxApi.post('/domain', data)
+      const response = await shopmaxApi.get('/token/get')
       return response
    } catch (error) {
       console.error(`API Request 오류: ${error.message}`)
@@ -11,10 +11,10 @@ export const setDomain = async (data) => {
    }
 }
 
-// 토큰 발급받기
-export const getToken = async () => {
+//토큰 읽기
+export const readToken = async () => {
    try {
-      const response = await shopmaxApi.get('/token/get')
+      const response = await shopmaxApi.get('/token/read')
       return response
    } catch (error) {
       console.error(`API Request 오류: ${error.message}`)

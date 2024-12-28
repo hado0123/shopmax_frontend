@@ -187,8 +187,8 @@ function Navbar({ isAuthenticated, user }) {
                         </MenuItem>
                         {user && user.role === 'ADMIN' && (
                            <MenuItem>
-                              <Link to="/domain" style={{ color: 'black', textDecoration: 'none' }}>
-                                 <Typography sx={{ textAlign: 'center' }}>도메인 등록</Typography>
+                              <Link to="/token" style={{ color: 'black', textDecoration: 'none' }}>
+                                 <Typography sx={{ textAlign: 'center' }}>API Key</Typography>
                               </Link>
                            </MenuItem>
                         )}

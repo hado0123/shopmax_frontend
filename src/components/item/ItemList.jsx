@@ -1,10 +1,30 @@
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Stack, Pagination, Select, MenuItem, FormControl, InputLabel, IconButton, Typography } from '@mui/material'
+import {
+   Box,
+   Table,
+   TableBody,
+   TableCell,
+   TableContainer,
+   TableHead,
+   TableRow,
+   Paper,
+   Button,
+   TextField,
+   Stack,
+   Pagination,
+   Select,
+   MenuItem,
+   FormControl,
+   InputLabel,
+   IconButton,
+   Typography,
+   Link,
+} from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { formatWithComma } from '../../utils/priceSet'
 import dayjs from 'dayjs'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchItemsThunk, deleteItemThunk } from '../../features/itemSlice'
 
@@ -90,9 +110,9 @@ function ItemList() {
       <Box sx={{ p: 4 }}>
          {/* 등록버튼 */}
          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-            <Link to="/items/create">
+            <RouterLink to="/items/create">
                <Button variant="contained">상품등록</Button>
-            </Link>
+            </RouterLink>
          </Box>
 
          {/* 테이블 */}
@@ -114,7 +134,7 @@ function ItemList() {
                         <TableRow key={item.id}>
                            <TableCell align="center">{item.id}</TableCell>
                            <TableCell>
-                              <Link to={`/items/edit/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                              <Link href={`/items/edit/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                  {item.itemNm}
                               </Link>
                            </TableCell>

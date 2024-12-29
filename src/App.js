@@ -16,6 +16,7 @@ import ItemEditPage from './pages/ItemEditPage'
 import ItemListPage from './pages/ItemListPage'
 import MyOrderListPage from './pages/MyOrderListPage'
 import TokenPage from './pages/TokenPage'
+import Chat from './components/chat/Chat'
 
 import RedirectLoginRoute from './components/auth/RedirectLoginRoute'
 import RedirectLogoutRoute from './components/auth/RedirectLogoutRoute'
@@ -94,7 +95,9 @@ function App() {
                   </AdminRoute>
                }
             />
+            <Route path="/chat" element={<Chat />} />
          </Routes>
+
          <Footer />
       </>
    )

@@ -1,14 +1,26 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { io } from 'socket.io-client'
+import { TextField, Button, Box } from '@mui/material'
 
-// 서버 주소
-const socket = io('http://localhost:8000')
+// 서버와 연결 (쿠키 포함)
+const socket = io('http://localhost:8000', {
+   withCredentials: true, // 쿠키를 포함하여 세션 유지
+})
 
 function Chat() {
    const [messages, setMessages] = useState([])
    const [input, setInput] = useState('')
+   const [user, setUser] = useState(null)
+   const messagesContainerRef = useRef(null) // 메시지 컨테이너에 대한 ref
 
    useEffect(() => {
+      socket.emit('user info', 'requestUserInfo')
+
+      // 서버에서 사용자 정보 가져오기
+      socket.on('user info', (userInfo) => {
+         setUser(userInfo) // 서버에서 받아온 사용자 정보 설정
+      })
+
       // 서버에서 메시지 수신
       socket.on('chat message', (msg) => {
          setMessages((prevMessages) => [...prevMessages, msg])
@@ -17,8 +29,16 @@ function Chat() {
       // 컴포넌트 언마운트 시 이벤트 제거
       return () => {
          socket.off('chat message')
+         socket.off('user info')
       }
    }, [])
+
+   useEffect(() => {
+      // 스크롤을 메시지 컨테이너의 가장 아래로 이동
+      if (messagesContainerRef.current) {
+         messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight
+      }
+   }, [messages]) // messages 상태가 변경될 때마다 실행
 
    const sendMessage = () => {
       if (!input.trim()) return
@@ -28,27 +48,82 @@ function Chat() {
       setInput('') // 입력 초기화
    }
 
+   const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+         e.preventDefault() // 기본 엔터키 동작 방지 (줄바꿈 방지)
+         sendMessage() // 메시지 전송
+      }
+   }
+
    return (
-      <div style={{ width: 400, margin: '0 auto', border: '1px solid #ccc', padding: 20 }}>
+      <Box
+         sx={{
+            width: 400,
+            margin: '0 auto',
+            border: '1px solid #ccc',
+            borderRadius: 2,
+            padding: 2,
+         }}
+      >
          <h2>채팅</h2>
-         <div
-            style={{
+         <Box
+            ref={messagesContainerRef} // 메시지 컨테이너에 ref 추가
+            sx={{
                height: 300,
                overflowY: 'auto',
                border: '1px solid #ccc',
-               padding: 10,
-               marginBottom: 10,
+               borderRadius: 1,
+               padding: 1,
+               marginBottom: 2,
             }}
          >
-            {messages.map((msg, index) => (
-               <div key={index} style={{ margin: '5px 0' }}>
-                  {msg}
-               </div>
-            ))}
-         </div>
-         <input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="메시지를 입력하세요" style={{ width: 'calc(100% - 60px)', marginRight: 10 }} />
-         <button onClick={sendMessage}>전송</button>
-      </div>
+            {messages.map((msg, index) => {
+               // 메시지를 보낸 사람이 현재 사용자일 경우 스타일을 오른쪽으로
+               const isOwnMessage = msg.user === user?.name
+
+               return (
+                  <Box
+                     key={index}
+                     sx={{
+                        display: 'flex',
+                        justifyContent: isOwnMessage ? 'flex-end' : 'flex-start',
+                        marginBottom: 1,
+                     }}
+                  >
+                     <Box
+                        sx={{
+                           backgroundColor: isOwnMessage ? '#dcf8c6' : '#f1f1f1',
+                           padding: '8px 15px',
+                           borderRadius: 2,
+                           maxWidth: '80%',
+                        }}
+                     >
+                        <strong>{msg.user || '알 수 없음'}:</strong> {msg.message}
+                     </Box>
+                  </Box>
+               )
+            })}
+         </Box>
+         <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <TextField
+               fullWidth
+               variant="outlined"
+               value={input}
+               onChange={(e) => setInput(e.target.value)}
+               placeholder="메시지를 입력하세요"
+               onKeyDown={handleKeyDown} // 엔터키 눌렀을 때 전송
+               sx={{
+                  marginRight: 1,
+                  '& .MuiInputBase-input': {
+                     padding: '8px', // 원하는 패딩 값
+                  },
+               }}
+            />
+            <Button variant="contained" color="primary" onClick={sendMessage} sx={{ flexShrink: 0 }}>
+               전송
+            </Button>
+         </Box>
+      </Box>
    )
 }
 

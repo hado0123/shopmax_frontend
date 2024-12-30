@@ -10,7 +10,7 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
-// import Link from '@mui/material/Link'
+// import { Link as MUILink } from '@mui/material'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
 // https://mui.com/material-ui/react-app-bar/#app-bar-with-responsive-menu
 
@@ -184,6 +184,11 @@ function Navbar({ isAuthenticated, user }) {
                         </MenuItem>
                         <MenuItem onClick={handleLogout}>
                            <Typography sx={{ textAlign: 'center' }}>로그아웃</Typography>
+                        </MenuItem>
+                        <MenuItem>
+                           <Link to="/chat" style={{ color: 'black', textDecoration: 'none' }}>
+                              <Typography sx={{ textAlign: 'center' }}>1:1 채팅 문의</Typography>
+                           </Link>
                         </MenuItem>
                         {user && user.role === 'ADMIN' && (
                            <MenuItem>

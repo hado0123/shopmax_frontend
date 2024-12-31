@@ -130,10 +130,10 @@ function OrderList() {
                                  주문 날짜: {dayjs(order.orderDate).format('YYYY-MM-DD HH:mm:ss')}
                               </Typography>
                               <Typography variant="body2" color="textSecondary" gutterBottom>
-                                 총 주문 수량: {order.OrderItems.map((oi) => oi.count)}
+                                 총 주문 수량: {order.Items.map((i) => i.OrderItem.count)}
                               </Typography>
                               <Typography variant="body2" color="textSecondary" gutterBottom>
-                                 총 주문 금액: {order.OrderItems.map((oi) => oi.orderPrice.toLocaleString('ko-KR'))}원
+                                 총 주문 금액: {order.Items.map((i) => i.OrderItem.orderPrice.toLocaleString('ko-KR'))}원
                               </Typography>
                            </CardContent>
                            {order.orderStatus === 'ORDER' ? (

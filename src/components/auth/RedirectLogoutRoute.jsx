@@ -9,10 +9,9 @@ function RedirectLoginRoute({ children }) {
       return null // 로딩 화면 표시 (필요에 따라 커스터마이징 가능)
    }
 
-   // 로그인 안했을 경우, 홈으로 리다이렉트
+   // 로그인 안했을 경우, 로그인 페이지로 리다이렉트
    if (!isAuthenticated) {
-      alert('로그인이 필요합니다!')
-      return <Navigate to="/" />
+      return <Navigate to="/login" />
    }
 
    // 로그인 한 경우 children 컴포넌트 렌더링

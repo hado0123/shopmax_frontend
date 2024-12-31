@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react'
 import { io } from 'socket.io-client'
 import { TextField, Button, Box } from '@mui/material'
 
-// 서버와 연결 (쿠키 포함)
-const socket = io('http://localhost:8000', {
-   withCredentials: true, // 쿠키를 포함하여 세션 유지
+// 서버와 연결 => connection 진행
+const socket = io(process.env.REACT_APP_API_URL, {
+   withCredentials: true, // 소켓에서 세션을 사용하므로 쿠키를 포함하여 세션 유지
 })
 
 function Chat() {
@@ -14,6 +14,7 @@ function Chat() {
    const messagesContainerRef = useRef(null) // 메시지 컨테이너에 대한 ref
 
    useEffect(() => {
+      // 서버에서 사용자 정보를 먼저 얻기위해 메세지 전송
       socket.emit('user info', 'requestUserInfo')
 
       // 서버에서 사용자 정보 가져오기

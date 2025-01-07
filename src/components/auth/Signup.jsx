@@ -14,9 +14,29 @@ function Signup() {
    const dispatch = useDispatch()
    const { loading, error } = useSelector((state) => state.auth)
 
+   const validateEmail = (email) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      return emailRegex.test(email)
+   }
+
+   const validatePassword = (password) => {
+      const passwordRegex = /^(?=.*[A-Za-z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/
+      return passwordRegex.test(password)
+   }
+
    const handleSignup = useCallback(() => {
       if (!email.trim() || !name.trim() || !address.trim() || !password.trim() || !confirmPassword.trim()) {
          alert('모든 필드를 입력해주세요!')
+         return
+      }
+
+      if (!validateEmail(email)) {
+         alert('유효한 이메일 주소를 입력해주세요!')
+         return
+      }
+
+      if (!validatePassword(password) || !validatePassword(confirmPassword)) {
+         alert('비밀번호는 8자리 이상이어야 하며, 영문자와 특수문자를 포함해야 합니다!')
          return
       }
 
@@ -72,23 +92,15 @@ function Signup() {
             </Typography>
          )}
 
-         <TextField label="이메일" variant="outlined" fullWidth margin="normal" value={email} onChange={(e) => setEmail(e.target.value)} />
+         <TextField label="이메일" variant="outlined" fullWidth margin="normal" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="example@example.com" inputProps={{ maxLength: 255 }} />
 
-         <TextField label="사용자 이름" variant="outlined" fullWidth margin="normal" value={name} onChange={(e) => setName(e.target.value)} />
+         <TextField label="사용자 이름" variant="outlined" fullWidth margin="normal" value={name} onChange={(e) => setName(e.target.value)} inputProps={{ maxLength: 80 }} />
 
-         <TextField label="주소" variant="outlined" type="text" fullWidth margin="normal" value={address} onChange={(e) => setAddress(e.target.value)} />
+         <TextField label="주소" variant="outlined" type="text" fullWidth margin="normal" value={address} onChange={(e) => setAddress(e.target.value)} inputProps={{ maxLength: 80 }} />
 
-         <TextField label="비밀번호" variant="outlined" type="password" fullWidth margin="normal" value={password} onChange={(e) => setPassword(e.target.value)} />
+         <TextField label="비밀번호" variant="outlined" type="password" fullWidth margin="normal" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="8자리 이상이어야 하며, 영문자와 특수문자를 포함합니다." inputProps={{ maxLength: 255 }} />
 
-         <TextField
-            label="비밀번호 확인"
-            variant="outlined"
-            type="password"
-            fullWidth
-            margin="normal"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-         />
+         <TextField label="비밀번호 확인" variant="outlined" type="password" fullWidth margin="normal" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="8자리 이상이어야 하며, 영문자와 특수문자를 포함합니다." inputProps={{ maxLength: 255 }} />
 
          <Button variant="contained" color="primary" onClick={handleSignup} fullWidth disabled={loading} style={{ marginTop: '20px' }}>
             {loading ? <CircularProgress size={24} /> : '회원가입'}

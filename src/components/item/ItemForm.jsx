@@ -14,23 +14,34 @@ function ItemForm({ onSubmit, initialValues = {} }) {
 
    // 이미지 파일 변경 핸들러
    const handleImageChange = useCallback((e) => {
+      // 파일 입력 이벤트에서 업로드된 파일 가져오기
       const files = e.target.files
+
+      // 파일이 없거나 파일 배열의 길이가 0이면 함수 종료
       if (!files || files.length === 0) return
 
-      const newFiles = Array.from(files).slice(0, 5) // 최대 5개로 제한
+      // 업로드된 파일 중 최대 5개까지만 선택
+      const newFiles = Array.from(files).slice(0, 5)
 
+      // 선택된 파일들을 기반으로 미리보기 URL 생성
       const newImgUrls = newFiles.map((file) => {
+         // FileReader 객체 생성
          const reader = new FileReader()
+         // 파일을 데이터 URL로 읽기 시작
          reader.readAsDataURL(file)
+         // Promise를 반환하여 비동기적으로 FileReader 작업 완료 대기
          return new Promise((resolve) => {
+            // 파일 읽기가 완료되었을 때 결과값을 Promise에 전달
             reader.onload = (event) => resolve(event.target.result)
          })
       })
 
-      // 기존 이미지와 파일을 덮어쓰기
+      // 모든 파일의 데이터 URL을 생성 완료한 후 실행
       Promise.all(newImgUrls).then((urls) => {
-         setImgFiles(newFiles) // 새 파일로 대체
-         setImgUrls(urls) // 새 미리보기 URL로 대체
+         // 선택된 새 파일로 상태 업데이트 (기존 파일 덮어쓰기)
+         setImgFiles(newFiles)
+         // 생성된 새 미리보기 URL로 상태 업데이트 (기존 URL 덮어쓰기)
+         setImgUrls(urls)
       })
    }, [])
 

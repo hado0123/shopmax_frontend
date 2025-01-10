@@ -15,8 +15,8 @@ export const createItemThunk = createAsyncThunk('items/createItem', async (itemD
 export const updateItemThunk = createAsyncThunk('items/updateItem', async (data, { rejectWithValue }) => {
    try {
       const { id, itemData } = data
-      const response = await updateItem(id, itemData)
-      return response.data.item
+      await updateItem(id, itemData)
+      return id
    } catch (error) {
       return rejectWithValue(error.response?.data?.message || '상품 삭제 실패')
    }

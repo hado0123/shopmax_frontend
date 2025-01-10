@@ -14,7 +14,7 @@ function ItemSellList({ searchTerm }) {
    // 데이터 가져오기 (페이징)
    useEffect(() => {
       dispatch(fetchItemsThunk({ page, limit: 8, searchTerm }))
-   }, [dispatch, page, searchTerm]) //검색어 입력시에도 다시 state변경
+   }, [dispatch, page, searchTerm]) //검색어 입력시 다시 state변경(searchIcon 클릭 -> home.jsx의 searchTerm state가 변경 -> itemSellList.jsx의 searchTerm props 변경 -> useEffect 실행)
 
    if (loading) {
       return null // 아무것도 보여주지 않음
@@ -52,7 +52,21 @@ function ItemSellList({ searchTerm }) {
                      <Link key={item.id} to={`/items/detail/${item.id}`} style={{ textDecoration: 'none' }}>
                         <Card sx={{ width: '250px' }}>
                            {/* 대표이미지만 가져오기 */}
-                           <CardMedia component="img" height="140" image={`${process.env.REACT_APP_API_URL}${item.Imgs.filter((img) => img.repImgYn === 'Y')[0].imgUrl}`} alt={item.itemNm} />
+                           <CardMedia
+                              component="img"
+                              height="140"
+                              image={`${process.env.REACT_APP_API_URL}${item.Imgs.filter((img) => img.repImgYn === 'Y')[0].imgUrl}`}
+                              /*
+                               [{
+                                 id:35,
+                                 oriImgName:"person_3.jpg",
+                                 imgUrl:"/person_31736474920385.jpg",
+                                 repImgYn:"Y"
+                              }]
+                           */
+                              alt={item.itemNm}
+                           />
+
                            <CardContent>
                               <Typography variant="h6" component="div">
                                  {item.itemNm}
